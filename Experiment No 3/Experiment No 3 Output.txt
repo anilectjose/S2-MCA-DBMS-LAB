@@ -1,0 +1,124 @@
+EXPERIMENT NO. 3: DDL COMMANDS  and CONSTRAINTS
+
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 21
+Server version: 8.0.24 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database anilect_dbms;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use anilect_dbms;
+Database changed
+
+mysql> CREATE TABLE emp(EMPNO INT(4) PRIMARY KEY, ENAME CHAR(10), HIREDATE DATE, SALARY INT(5), COMMISSION INT(5));
+Query OK, 0 rows affected, 3 warnings (0.02 sec)
+
+mysql> desc emp;
++------------+----------+------+-----+---------+-------+
+| Field      | Type     | Null | Key | Default | Extra |
++------------+----------+------+-----+---------+-------+
+| EMPNO      | int      | NO   | PRI | NULL    |       |
+| ENAME      | char(10) | YES  |     | NULL    |       |
+| HIREDATE   | date     | YES  |     | NULL    |       |
+| SALARY     | int      | YES  |     | NULL    |       |
+| COMMISSION | int      | YES  |     | NULL    |       |
++------------+----------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> INSERT INTO emp(EMPNO,ENAME,HIREDATE,SALARY) VALUES (101,'RAMESH','1980-01-17',5000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO emp(EMPNO,ENAME,HIREDATE,SALARY,COMMISSION) VALUES (102,'AJAY','1985-07-05',5000,500);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO emp(EMPNO,ENAME,HIREDATE,SALARY) VALUES (103,'RAVI','1981-08-12',1500);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO emp(EMPNO,ENAME,HIREDATE,SALARY,COMMISSION) VALUES (104,'Nikesh','1983-03-03',3000,700);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> INSERT INTO emp(EMPNO,ENAME,HIREDATE,SALARY) VALUES (105,'Ravi','1985-07-05',3000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from emp;
++-------+--------+------------+--------+------------+
+| EMPNO | ENAME  | HIREDATE   | SALARY | COMMISSION |
++-------+--------+------------+--------+------------+
+|   101 | RAMESH | 1980-01-17 |   5000 |       NULL |
+|   102 | AJAY   | 1985-07-05 |   5000 |        500 |
+|   103 | RAVI   | 1981-08-12 |   1500 |       NULL |
+|   104 | Nikesh | 1983-03-03 |   3000 |        700 |
+|   105 | Ravi   | 1985-07-05 |   3000 |       NULL |
++-------+--------+------------+--------+------------+
+5 rows in set (0.00 sec)
+
+mysql> ALTER TABLE emp ADD sal int;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE emp DROP COLUMN sal;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE emp MODIFY ename VARCHAR(15);
+Query OK, 5 rows affected (0.05 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> RENAME table emp to emp1;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> select * from  emp1;
++-------+--------+------------+--------+------------+
+| EMPNO | ename  | HIREDATE   | SALARY | COMMISSION |
++-------+--------+------------+--------+------------+
+|   101 | RAMESH | 1980-01-17 |   5000 |       NULL |
+|   102 | AJAY   | 1985-07-05 |   5000 |        500 |
+|   103 | RAVI   | 1981-08-12 |   1500 |       NULL |
+|   104 | Nikesh | 1983-03-03 |   3000 |        700 |
+|   105 | Ravi   | 1985-07-05 |   3000 |       NULL |
++-------+--------+------------+--------+------------+
+5 rows in set (0.00 sec)
+
+mysql> TRUNCATE TABLE emp1;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> select * from  emp1;
+Empty set (0.00 sec)
+
+mysql> DROP TABLE emp1;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> select * from  emp1;
+ERROR 1146 (42S02): Table 'anilect_dbms.emp1' doesn't exist
+mysql> CREATE TABLE stud(sname varchar(20) PRIMARY KEY, rollno int NOT NULL, dob date NOT NULL);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> desc stud;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| sname  | varchar(20) | NO   | PRI | NULL    |       |
+| rollno | int         | NO   |     | NULL    |       |
+| dob    | date        | NO   |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> CREATE TABLE cust(custid int(6) UNIQUE, name char(10));
+Query OK, 0 rows affected, 1 warning (0.03 sec)
+
+mysql> desc cust;
++--------+----------+------+-----+---------+-------+
+| Field  | Type     | Null | Key | Default | Extra |
++--------+----------+------+-----+---------+-------+
+| custid | int      | YES  | UNI | NULL    |       |
+| name   | char(10) | YES  |     | NULL    |       |
++--------+----------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
