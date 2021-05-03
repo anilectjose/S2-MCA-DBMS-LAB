@@ -1,0 +1,162 @@
+Experiment No: 1 Date: 03/05/2021
+
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 21
+Server version: 8.0.24 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database anilect_dbms;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use anilect_dbms;
+Database changed
+
+mysql> create table DEPOSIT (ACTNO varchar(10) CHECK(ACTNO LIKE 'D%') primary key ,CNAME varchar(15) REFERENCES CUSTOMER1(CNAME),BNAME varchar(20) REFERENCES BRANCH1(BNAME),AMOUNT float(8,2) NOT NULL,ADATE DATE);
+Query OK, 0 rows affected, 1 warning (0.04 sec)
+
+mysql>
+mysql> create table BRANCH (BNAME VARCHAR(20) PRIMARY KEY,CITY VARCHAR(30) CHECK (CITY IN ('NAGPUR','DELHI','BANGALORE','BOMBAY')) NOT NULL);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql>
+mysql> create table CUSTOMER (CNAME VARCHAR(15) PRIMARY KEY,CITY VARCHAR(20) NOT NULL);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql>
+mysql> create table BORROW (LOANNO VARCHAR(8) PRIMARY KEY check (LOANNO LIKE "L%"),CNAME VARCHAR(15),FOREIGN KEY (CNAME) REFERENCES CUSTOMER1(CNAME),BNAME VARCHAR(20),FOREIGN KEY(BNAME) REFERENCES BRANCH1(BNAME),AMOUNT FLOAT(8,2) CHECK (AMOUNT > 0) NOT NULL);
+Query OK, 0 rows affected, 1 warning (0.04 sec)
+
+mysql> desc customer;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| CNAME | varchar(15) | NO   | PRI | NULL    |       |
+| CITY  | varchar(20) | NO   |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.01 sec)
+
+mysql> desc deposit;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| ACTNO  | varchar(10) | NO   | PRI | NULL    |       |
+| CNAME  | varchar(15) | YES  |     | NULL    |       |
+| BNAME  | varchar(20) | YES  |     | NULL    |       |
+| AMOUNT | float(8,2)  | NO   |     | NULL    |       |
+| ADATE  | date        | YES  |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> desc borrow;
++--------+-------------+------+-----+---------+-------+
+| Field  | Type        | Null | Key | Default | Extra |
++--------+-------------+------+-----+---------+-------+
+| LOANNO | varchar(8)  | NO   | PRI | NULL    |       |
+| CNAME  | varchar(15) | YES  | MUL | NULL    |       |
+| BNAME  | varchar(20) | YES  | MUL | NULL    |       |
+| AMOUNT | float(8,2)  | NO   |     | NULL    |       |
++--------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> desc branch;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| BNAME | varchar(20) | NO   | PRI | NULL    |       |
+| CITY  | varchar(30) | NO   |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> INSERT INTO `CUSTOMER`(`CNAME`, `CITY`) VALUES ('ANIL','CULCUTTA'),('SUNIL','DELHI'),('MEHUL','BARODA'),('MANDAR','PANTA'),('MADHURI','NAGPUR'),('PRAMOD','NAGPUR'),('SANDIP','SURAT'), ('SHIVANI','BOMBAY'),('KRANTI','BOMBAY'),('NAREN','BOMBAY');
+Query OK, 10 rows affected (0.01 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> select * from customer;
++---------+----------+
+| CNAME   | CITY     |
++---------+----------+
+| ANIL    | CULCUTTA |
+| KRANTI  | BOMBAY   |
+| MADHURI | NAGPUR   |
+| MANDAR  | PANTA    |
+| MEHUL   | BARODA   |
+| NAREN   | BOMBAY   |
+| PRAMOD  | NAGPUR   |
+| SANDIP  | SURAT    |
+| SHIVANI | BOMBAY   |
+| SUNIL   | DELHI    |
++---------+----------+
+10 rows in set (0.00 sec)
+
+mysql> INSERT INTO `DEPOSIT`(`ACTNO`, `CNAME`, `BNAME`, `AMOUNT`, `ADATE`) VALUES('D100','ANIL','VRCE',1000,'1995-03-01'),('D101','SUNIL','AJNI',5000.00,'1996-01-04'),
+  ('D102','MEHUL','KAROLBAGH',3500.00,'1995-11-17'),('D104','MADHURI','CHANDNI',1200.00,'1995-12-17'),('D105','PRAMOD','M.G.ROAD',3000.00,'1996-03-27'),
+  ('D106','SANDIP','ANDHERI',2000.00,'1996-03-31'),('D107','SHIVANI','VIRAR',1000.00,'1995-09-05'),('D108','KRANTI','NEHRU PLACE',5000.00,'1995-07-02'),
+  ('D109','NAREN','POWAI',7000.00,'1995-08-10');
+Query OK, 9 rows affected (0.01 sec)
+Records: 9  Duplicates: 0  Warnings: 0
+
+mysql> select * from deposit;
++-------+---------+-------------+---------+------------+
+| ACTNO | CNAME   | BNAME       | AMOUNT  | ADATE      |
++-------+---------+-------------+---------+------------+
+| D100  | ANIL    | VRCE        | 1000.00 | 1995-03-01 |
+| D101  | SUNIL   | AJNI        | 5000.00 | 1996-01-04 |
+| D102  | MEHUL   | KAROLBAGH   | 3500.00 | 1995-11-17 |
+| D104  | MADHURI | CHANDNI     | 1200.00 | 1995-12-17 |
+| D105  | PRAMOD  | M.G.ROAD    | 3000.00 | 1996-03-27 |
+| D106  | SANDIP  | ANDHERI     | 2000.00 | 1996-03-31 |
+| D107  | SHIVANI | VIRAR       | 1000.00 | 1995-09-05 |
+| D108  | KRANTI  | NEHRU PLACE | 5000.00 | 1995-07-02 |
+| D109  | NAREN   | POWAI       | 7000.00 | 1995-08-10 |
++-------+---------+-------------+---------+------------+
+9 rows in set (0.00 sec)
+
+mysql> INSERT INTO BRANCH(BNAME, CITY) VALUES
+    ('VRCE','NAGPUR'),('AJNI','NAGPUR'),('KAROLBAGH','DELHI'),
+    ('CHANDNI','DELHI'),('DHARAMPETH','NAGPUR'),('MG ROAD','BANGALORE'),
+    ('ANDHERI','BOMBAY'),('NEHRU PALACE','DELHI'),('POWAI','BOMBAY');
+Query OK, 9 rows affected (0.01 sec)
+Records: 9  Duplicates: 0  Warnings: 0
+
+mysql> select * from branch;
++--------------+-----------+
+| BNAME        | CITY      |
++--------------+-----------+
+| AJNI         | NAGPUR    |
+| ANDHERI      | BOMBAY    |
+| CHANDNI      | DELHI     |
+| DHARAMPETH   | NAGPUR    |
+| KAROLBAGH    | DELHI     |
+| MG ROAD      | BANGALORE |
+| NEHRU PALACE | DELHI     |
+| POWAI        | BOMBAY    |
+| VRCE         | NAGPUR    |
++--------------+-----------+
+9 rows in set (0.00 sec)
+
+mysql> INSERT INTO BORROW VALUES
+    ->    ('L201','ANIL','VRCE',1000.00),('L206','MEHUL','AJNI',5000.00),('L311','SUNIL','DHARAMPETH',3000.00),
+    ->    ('L321','MADHURI','ANDHERI',2000.00),('L371','PRAMOD','VIRAR',8000.00),('L481','KRANTI','NEHRU PLACE',3000.00);
+Query OK, 6 rows affected (0.01 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> select * from borrow;
++--------+---------+-------------+---------+
+| LOANNO | CNAME   | BNAME       | AMOUNT  |
++--------+---------+-------------+---------+
+| L201   | ANIL    | VRCE        | 1000.00 |
+| L206   | MEHUL   | AJNI        | 5000.00 |
+| L311   | SUNIL   | DHARAMPETH  | 3000.00 |
+| L321   | MADHURI | ANDHERI     | 2000.00 |
+| L371   | PRAMOD  | VIRAR       | 8000.00 |
+| L481   | KRANTI  | NEHRU PLACE | 3000.00 |
++--------+---------+-------------+---------+
+6 rows in set (0.00 sec)
+
