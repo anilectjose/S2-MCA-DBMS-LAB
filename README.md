@@ -1,1 +1,1 @@
-# S2_AnilectJose_DBMS_1
+# S2_AnilectJose_DBMS
