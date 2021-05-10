@@ -1,0 +1,80 @@
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 10
+Server version: 8.0.24 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use anilect_dbms;
+Database changed
+
+mysql> SELECT CNAME FROM DEPOSIT  MINUS (SELECT CNAME FROM BORROW);
+Empty set (0.00 sec)
+
+mysql> SELECT CNAME FROM DEPOSIT  UNION  (SELECT CNAME FROM BORROW);
++---------+
+| CNAME   |
++---------+
+| ANIL    |
+| SUNIL   |
+| MEHUL   |
+| MADHURI |
+| PRAMOD  |
+| SANDIP  |
+| SHIVANI |
+| KRANTI  |
+| NAREN   |
++---------+
+9 rows in set (0.01 sec)
+
+mysql> SELECT D1.CNAME FROM DEPOSIT D1 WHERE D1.BNAME IN (SELECT D2.BNAME FROM DEPOSIT D2 WHERE D2.CNAME = 'SUNIL' );
++-------+
+| CNAME |
++-------+
+| SUNIL |
++-------+
+1 row in set (0.00 sec)
+
+mysql> SELECT C1.CNAME FROM CUSTOMER C1,DEPOSIT D1, BRANCH B1 WHERE C1.CITY = 'NAGPUR' AND C1.CNAME = D1.CNAME AND D1.BNAME = B1.BNAME AND B1.CITY IN ('BOMBAY','DELHI');
++---------+
+| CNAME   |
++---------+
+| MADHURI |
++---------+
+1 row in set (0.01 sec)
+
+mysql> SELECT Distinct(CUSTOMER.CNAME) from CUSTOMER,DEPOSIT WHERE City='NAGPUR';
++---------+
+| CNAME   |
++---------+
+| PRAMOD  |
+| MADHURI |
++---------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT C1.CNAME FROM CUSTOMER C1,DEPOSIT D1, BRANCH B1 WHERE C1.CITY = 'NAGPUR' AND C1.CNAME = D1.CNAME AND D1.BNAME = B1.BNAME AND B1.CITY IN ('BOMBAY');
+Empty set (0.00 sec)
+
+mysql> SELECT B1.CITY FROM DEPOSIT D1, BRANCH B1 WHERE D1.BNAME = B1.BNAME AND D1.CNAME IN ('SUNIL' ,'ANIL');
++--------+
+| CITY   |
++--------+
+| NAGPUR |
+| NAGPUR |
++--------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT B1.CITY FROM BRANCH B1 WHERE B1.BNAME IN (SELECT D1.BNAME FROM DEPOSIT D1 WHERE D1.CNAME IN ('ANIL','SUNIL'));
++--------+
+| CITY   |
++--------+
+| NAGPUR |
+| NAGPUR |
++--------+
+2 rows in set (0.00 sec)
