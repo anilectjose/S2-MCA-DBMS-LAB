@@ -1,0 +1,185 @@
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 10
+Server version: 8.0.24 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use anilect_dbms;
+Database changed
+
+mysql> SELECT SUM(AMOUNT) FROM BORROW;
++-------------+
+| SUM(AMOUNT) |
++-------------+
+|    22000.00 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT SUM(AMOUNT) FROM DEPOSIT;
++-------------+
+| SUM(AMOUNT) |
++-------------+
+|    28700.00 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT MAX(AMOUNT) FROM BORROW WHERE BNAME ='KAROLBAGH';
++-------------+
+| MAX(AMOUNT) |
++-------------+
+|        NULL |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT SUM(AMOUNT) from deposit where adate>'1995-03-01';
++-------------+
+| SUM(AMOUNT) |
++-------------+
+|    27700.00 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT SUM(D1.AMOUNT) FROM DEPOSIT D1 , CUSTOMER C1 WHERE C1.CITY = 'NAGPUR' AND C1.CNAME = D1.CNAME;
++----------------+
+| SUM(D1.AMOUNT) |
++----------------+
+|        4200.00 |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT MAX(D1.AMOUNT) FROM DEPOSIT D1 , CUSTOMER C1 WHERE C1.CITY = 'Bombay' AND C1.CNAME = D1.CNAME;
++----------------+
+| MAX(D1.AMOUNT) |
++----------------+
+|        7000.00 |
++----------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT SUM(AMOUNT) from deposit,BRANCH where city='BOMBAY';
++-------------+
+| SUM(AMOUNT) |
++-------------+
+|    57400.00 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT COUNT(DISTINCT(CITY)) FROM BRANCH ;
++-----------------------+
+| COUNT(DISTINCT(CITY)) |
++-----------------------+
+|                     4 |
++-----------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT count(city) from CUSTOMER;
++-------------+
+| count(city) |
++-------------+
+|          10 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT BNAME , SUM(AMOUNT) FROM DEPOSIT GROUP BY BNAME;
++-------------+-------------+
+| BNAME       | SUM(AMOUNT) |
++-------------+-------------+
+| VRCE        |     1000.00 |
+| AJNI        |     5000.00 |
+| KAROLBAGH   |     3500.00 |
+| CHANDNI     |     1200.00 |
+| M.G.ROAD    |     3000.00 |
+| ANDHERI     |     2000.00 |
+| VIRAR       |     1000.00 |
+| NEHRU PLACE |     5000.00 |
+| POWAI       |     7000.00 |
++-------------+-------------+
+9 rows in set (0.00 sec)
+
+mysql> SELECT C1.CITY , SUM(D1.AMOUNT) FROM CUSTOMER C1 , DEPOSIT D1 WHERE D1.CNAME = C1.CNAME GROUP BY C1.CITY;
++----------+----------------+
+| CITY     | SUM(D1.AMOUNT) |
++----------+----------------+
+| CULCUTTA |        1000.00 |
+| DELHI    |        5000.00 |
+| BARODA   |        3500.00 |
+| NAGPUR   |        4200.00 |
+| SURAT    |        2000.00 |
+| BOMBAY   |       13000.00 |
++----------+----------------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT BNAME , SUM(AMOUNT) FROM BORROW,CUSTOMER  WHERE city ='NAGPUR' GROUP BY BNAME;
++-------------+-------------+
+| BNAME       | SUM(AMOUNT) |
++-------------+-------------+
+| VRCE        |     2000.00 |
+| AJNI        |    10000.00 |
+| DHARAMPETH  |     6000.00 |
+| ANDHERI     |     4000.00 |
+| VIRAR       |    16000.00 |
+| NEHRU PLACE |     6000.00 |
++-------------+-------------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT count(cname) from CUSTOMER;
++--------------+
+| count(cname) |
++--------------+
+|           10 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql>  select BName, count(*) from DEPOSIT, CUSTOMER where deposit.CNAME = CUSTOMER.CNAME group by BNAME;
++-------------+----------+
+| BName       | count(*) |
++-------------+----------+
+| VRCE        |        1 |
+| AJNI        |        1 |
+| KAROLBAGH   |        1 |
+| CHANDNI     |        1 |
+| M.G.ROAD    |        1 |
+| ANDHERI     |        1 |
+| VIRAR       |        1 |
+| NEHRU PLACE |        1 |
+| POWAI       |        1 |
++-------------+----------+
+9 rows in set (0.00 sec)
+
+mysql>  select BName, count(*) from DEPOSIT, CUSTOMER where deposit.CNAME = CUSTOMER.CNAME group by BNAME;
++-------------+----------+
+| BName       | count(*) |
++-------------+----------+
+| VRCE        |        1 |
+| AJNI        |        1 |
+| KAROLBAGH   |        1 |
+| CHANDNI     |        1 |
+| M.G.ROAD    |        1 |
+| ANDHERI     |        1 |
+| VIRAR       |        1 |
+| NEHRU PLACE |        1 |
+| POWAI       |        1 |
++-------------+----------+
+9 rows in set (0.00 sec)
+
+mysql> SELECT MAX(AMOUNT) FROM BORROW WHERE BNAME ='VRCE';
++-------------+
+| MAX(AMOUNT) |
++-------------+
+|     1000.00 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT COUNT(DISTINCT (CNAME)) FROM CUSTOMER WHERE CNAME IN ((SELECT CNAME FROM DEPOSIT) INTERSECT (SELECT CNAME FROM  BORROW));
++------------------+
+| (No column name) |
++------------------+
+|    3             |
++------------------+
+1 row in set (0.00 sec)
