@@ -1,0 +1,90 @@
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 10
+Server version: 8.0.24 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use anilect_dbms;
+Database changed
+
+mysql> SELECT D.BNAME FROM DEPOSIT D, BRANCH B WHERE D.BNAME=B.BNAME AND B.CITY='BOMBAY' GROUP BY D.BNAME HAVING SUM(D.AMOUNT)>5000;
++-------+
+| BNAME |
++-------+
+| POWAI |
++-------+
+1 row in set (0.06 sec)
+
+mysql> SELECT D.BNAME FROM DEPOSIT D, BRANCH B WHERE D.BNAME=B.BNAME GROUP BY D.BNAME HAVING SUM(D.AMOUNT)>5000;
++-------+
+| BNAME |
++-------+
+| POWAI |
++-------+
+1 row in set (0.00 sec)
+
+mysql> select CNAME from deposit where AMOUNT=(select AVG(Amount) from DEPOSIT GROUP BY BNAME having AVG(Amount)>5000);
++-------+
+| CNAME |
++-------+
+| NAREN |
++-------+
+1 row in set (0.00 sec)
+
+mysql> SELECT MAX(AMOUNT),CNAME FROM deposit;
++-------+-------------+
+| CNAME |     AMOUNT  |
++-------+-------------+
+| ANIL  |     7000.00 |
++-------+-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT D1.BNAME FROM DEPOSIT D1 GROUP BY D1.BNAME HAVING COUNT(D1.CNAME) > =  ALL (SELECT COUNT (D2.CNAME) FROM DEPOSIT D2 GROUP BY D2.BNAME);
++-----------+
+| BNAME     |
++-----------+
+| CHANDNI   |
+| KAROLBAGH |
+| M.G.ROAD  |
+| VRCE      |
++-----------+
+4 row in set (0.10 sec)
+
+mysql> select count(deposit.cname)from deposit,CUSTOMER where  CUSTOMER.CITY='nagpur';
++----------------------+
+| count(deposit.cname) |
++----------------------+
+|                   18 |
++----------------------+
+1 row in set (0.00 sec)
+
+mysql> Select CNAME from deposit  where BNAME='VRCE' and amount=(select max(AMOUNT)  from deposit where BNAME='VRCE');
++-------+
+| CNAME |
++-------+
+| ANIL  |
++-------+
+1 row in set (0.00 sec)
+
+mysql> SELECT BNAME from deposit GROUP BY BNAME HAVING COUNT(BNAME)>5;
+Empty set (0.00 sec)
+
+mysql> select C.CNAME ,count(B.BNAME) from CUSTOMER C inner join Branch B on C.CNAME=B.BNAME group by C.Cname order by count(B.BName) DESC;
+Empty set (0.00 sec)
+
+mysql> select count(b1.bname) From deposit d1 , borrow b1 , customer c1 Where c1.cname=d1.cname and d1.cname=b1.cname and c1.city in (select city from customer);
++-----------------+
+| count(b1.bname) |
++-----------------+
+|               6 |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> 

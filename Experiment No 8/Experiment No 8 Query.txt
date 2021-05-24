@@ -1,0 +1,31 @@
+/*EXPERIMENT NO.7 : 24/05/2021 GROUP BY AND HAVING*/
+
+/*1.List the branches having sum of deposit more than 5000.*/
+SELECT D.BNAME FROM DEPOSIT D, BRANCH B WHERE D.BNAME=B.BNAME GROUP BY D.BNAME HAVING SUM(D.AMOUNT)>5000;
+
+/*2.List the branches having sum of deposit more than 500 and located in city BOMBAY*/
+SELECT D.BNAME FROM DEPOSIT D, BRANCH B WHERE D.BNAME=B.BNAME AND B.CITY='BOMBAY' GROUP BY D.BNAME HAVING SUM(D.AMOUNT)>5000;
+
+/*3.List the names of customers having deposited in the branches where the average deposit is more than 5000.*/
+select CNAME from deposit where AMOUNT=(select AVG(Amount) from DEPOSIT GROUP BY BNAME having AVG(Amount)>5000);
+
+/*4.List the names of customers having maximum deposit*/
+SELECT CNAME,MAX(AMOUNT)"AMOUNT" FROM deposit;
+
+/*5.List the name of branch having highest number of depositors?*/
+SELECT D1.BNAME FROM DEPOSIT D1 GROUP BY D1.BNAME HAVING COUNT(D1.CNAME) > =  ALL (SELECT COUNT (D2.CNAME) FROM DEPOSIT D2 GROUP BY D2.BNAME);
+
+/*6.Count the number of depositors living in NAGPUR.*/
+select count(deposit.cname)from deposit,CUSTOMER where  CUSTOMER.CITY='nagpur';
+
+/*7.Give names of customers in VRCE branch having more deposite than any other customer in same branch*/
+Select CNAME from deposit  where BNAME='VRCE' and amount=(select max(AMOUNT)  from deposit where BNAME='VRCE');
+
+/*8.Give the names of branch where number of depositors is more than 5*/
+SELECT BNAME from deposit GROUP BY BNAME HAVING COUNT(BNAME)>5;
+
+/*9.Give the names of cities in which the maximum number of branches are located*/
+select C.CNAME ,count(B.BNAME) from CUSTOMER C inner join Branch B on C.CNAME=B.BNAME group by C.Cname order by count(B.BName) DESC;
+
+/*10.Count the number of customers living in the city where branch is located*/
+select count(b1.bname) From deposit d1 , borrow b1 , customer c1 Where c1.cname=d1.cname and d1.cname=b1.cname and c1.city in (select city from customer);
