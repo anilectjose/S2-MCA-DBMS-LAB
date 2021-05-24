@@ -70,6 +70,31 @@ mysql> SELECT B1.CITY FROM DEPOSIT D1, BRANCH B1 WHERE D1.BNAME = B1.BNAME AND D
 +--------+
 2 rows in set (0.00 sec)
 
+mysql> SELECT DISTINCT D1.CNAME FROM deposit D1, borrow B1 WHERE D1.AMOUNT>1000 AND B1.AMOUNT<10000;
++---------+
+| CNAME   |
++---------+
+| SUNIL   |
+| MEHUL   |
+| MADHURI |
+| PRAMOD  |
+| SANDIP  |
+| KRANTI  |
+| NAREN   |
++---------+
+7 rows in set (0.00 sec)
+
+mysql> SELECT B1.CITY FROM deposit D1, branch B1 WHERE D1.BNAME=B1.BNAME AND B1.BNAME='VRCE';
++--------+
+| CITY   |
++--------+
+| NAGPUR |
++--------+
+1 row in set (0.00 sec)
+
+mysql> SELECT D1.CNAME FROM deposit D1, customer C1 WHERE AMOUNT<1000 AND C1.CITY=(C1.CNAME='ANIL');
+Empty set, 10 warnings (0.00 sec)
+
 mysql> SELECT B1.CITY FROM BRANCH B1 WHERE B1.BNAME IN (SELECT D1.BNAME FROM DEPOSIT D1 WHERE D1.CNAME IN ('ANIL','SUNIL'));
 +--------+
 | CITY   |
@@ -78,3 +103,11 @@ mysql> SELECT B1.CITY FROM BRANCH B1 WHERE B1.BNAME IN (SELECT D1.BNAME FROM DEP
 | NAGPUR |
 +--------+
 2 rows in set (0.00 sec)
+
+mysql> SELECT DISTINCT(D1.CNAME),D1.AMOUNT ,C1.CITY FROM deposit D1, CUSTOMER C1, BRANCH B1 WHERE D1.CNAME=C1.CNAME AND C1.CITY IN(SELECT C2.CITY FROM customer C2 WHERE C2.CNAME='ANIL');
++-------+---------+----------+
+| CNAME | AMOUNT  | CITY     |
++-------+---------+----------+
+| ANIL  | 1000.00 | CULCUTTA |
++-------+---------+----------+
+1 row in set (0.00 sec)
