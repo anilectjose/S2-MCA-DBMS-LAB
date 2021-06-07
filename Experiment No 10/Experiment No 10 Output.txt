@@ -1,0 +1,147 @@
+Enter password: ******
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 13
+Server version: 8.0.24 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use anilect;
+Database changed
+mysql> create table clientmaster (client_no int primary key not null, cname varchar(20), city varchar(26));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> desc clientmaster;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| client_no | int         | NO   | PRI | NULL    |       |
+| cname     | varchar(20) | YES  |     | NULL    |       |
+| city      | varchar(26) | YES  |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> create table salesmaster (salesmanno int primary key,sname VARCHAR(20),city VARCHAR(10));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc salesmaster;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| salesmanno | int         | NO   | PRI | NULL    |       |
+| sname      | varchar(20) | YES  |     | NULL    |       |
+| city       | varchar(10) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql> create table salesorder (order_no varchar(20) primary key not null check (order_no like "0%"),client_no int REFERENCES clientmaster(client_no), order_date date);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc salesorder;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| order_no   | varchar(20) | NO   | PRI | NULL    |       |
+| client_no  | int         | YES  |     | NULL    |       |
+| order_date | date        | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+mysql>
+mysql> INSERT INTO clientmaster VALUES(101,'senchu','kannur'),(102,'sobin','kannur'),(103,'sajan','mumbai'),(104,'siju','gujarath'),(105,'george','kottayam');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from clientmaster;
++-----------+--------+----------+
+| client_no | cname  | city     |
++-----------+--------+----------+
+|       101 | senchu | kannur   |
+|       102 | sobin  | kannur   |
+|       103 | sajan  | mumbai   |
+|       104 | siju   | gujarath |
+|       105 | george | kottayam |
++-----------+--------+----------+
+5 rows in set (0.00 sec)
+
+mysql> insert into salesmaster VALUES(1,'biju','mumbai'),(2,'amith','mumbai'),(3,'sreelal','kannur'),(4,'anoop','thrissur'),(5,'goutham','pala');
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from salesmaster;
++------------+---------+----------+
+| salesmanno | sname   | city     |
++------------+---------+----------+
+|          1 | biju    | mumbai   |
+|          2 | amith   | mumbai   |
+|          3 | sreelal | kannur   |
+|          4 | anoop   | thrissur |
+|          5 | goutham | pala     |
++------------+---------+----------+
+5 rows in set (0.00 sec)
+
+mysql> insert into salesorder values ('0',101,'2013-06-01'),('01',103,'2013-02-01'),('02',103,'2013-03-21'),('03',102,'2013-03-02'),('04',105,'2013-04-02');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> select * from salesorder;
++----------+-----------+------------+
+| order_no | client_no | order_date |
++----------+-----------+------------+
+| 0        |       101 | 2013-06-01 |
+| 01       |       103 | 2013-02-01 |
+| 02       |       103 | 2013-03-21 |
+| 03       |       102 | 2013-03-02 |
+| 04       |       105 | 2013-04-02 |
++----------+-----------+------------+
+5 rows in set (0.00 sec)
+
+mysql>
+mysql> select *  from clientmaster join salesorder on clientmaster.client_no=salesorder.client_no where clientmaster.cname='sajan';
++-----------+-------+--------+----------+-----------+------------+
+| client_no | cname | city   | order_no | client_no | order_date |
++-----------+-------+--------+----------+-----------+------------+
+|       103 | sajan | mumbai | 01       |       103 | 2013-02-01 |
+|       103 | sajan | mumbai | 02       |       103 | 2013-03-21 |
++-----------+-------+--------+----------+-----------+------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT c.cname,s.sname FROM clientmaster c,salesmaster s WHERE c.city="mumbai" and s.city IN (SELECT city FROM salesmaster where city="mumbai");
++-------+-------+
+| cname | sname |
++-------+-------+
+| sajan | biju  |
+| sajan | amith |
++-------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select order_no,cname,order_date from clientmaster inner join salesorder on clientmaster.client_no=salesorder.client_no;
++----------+--------+------------+
+| order_no | cname  | order_date |
++----------+--------+------------+
+| 0        | senchu | 2013-06-01 |
+| 01       | sajan  | 2013-02-01 |
+| 02       | sajan  | 2013-03-21 |
+| 03       | sobin  | 2013-03-02 |
+| 04       | george | 2013-04-02 |
++----------+--------+------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT c.cname,s.order_date,s.order_no FROM clientmaster c,salesorder s WHERE c.client_no IN (SELECT s.client_no from salesorder);
++--------+------------+----------+
+| cname  | order_date | order_no |
++--------+------------+----------+
+| senchu | 2013-06-01 | 0        |
+| sajan  | 2013-02-01 | 01       |
+| sajan  | 2013-03-21 | 02       |
+| sobin  | 2013-03-02 | 03       |
+| george | 2013-04-02 | 04       |
++--------+------------+----------+
+5 rows in set (0.00 sec)
+
+mysql>
