@@ -1,0 +1,14 @@
+4.3 :select CNAME from customer where CNAME like '%a%' AND CNAME like '%i%'
+4.5 select BNAME from branch where BNAME like 'A%' AND BNAME like '%a%' AND BNAME LIKE '%i%'
+4.6 SELECT SUM(salary) AS "Total Salary" FROM emp1
+4.7 SELECT SUM(commission) AS "Total commission" FROM emp1
+4.8 SELECT AVG(salary) AS "Average salary" FROM emp1
+4.9 SELECT AVG(commission) AS "Average commission" FROM emp1
+4.10 select ename from emp1 where salary =(SELECT MAX(salary) FROM emp1)
+4.11 select ename , commission from emp1 where commission =(SELECT MAX(commission) FROM emp1)
+4.12 select ename from emp1 where salary =(SELECT MIN(salary) FROM emp1)
+4.13 select ename , commission from emp1 where commission =(SELECT MIN(commission) FROM emp1)
+4.14 SELECT COUNT(*) "No of Employees" FROM emp1
+4.15 SELECT DISTINCT ename FROM emp1
+4.16 select stddev(salary) from emp1
+4.17 select STDDEV_POP(salary) AS "variance" from emp1
