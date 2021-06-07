@@ -1,0 +1,38 @@
+create table student (roll_no int primary key, name char(20) not null, sex char(1) CHECK (sex IN ('M','F')), dob date not null check (1999-12-31<dob<getdate()), course varchar(20) CHECK (course IN ('MCA','CSE','ME')), sem varchar(10) CHECK (semk IN ('S3','S4')));
+create table student (roll_no int primary key, name char(20) not null, sex char(1) CHECK (sex IN ('M','F')), dob date not null check (1999-12-31<dob<CURRENT_TIMESTAMP), course varchar(20) CHECK (course IN ('MCA','CSE','ME')), sem varchar(10) CHECK (semk IN ('S3','S4')));
+create table student (roll_no int primary key, name char(20) not null, sex char(1) CHECK (sex IN ('M','F')), dob date not null check (1999-12-31<dob<CURDATE()), course varchar(20) CHECK (course IN ('MCA','CSE','ME')), sem varchar(10) CHECK (semk IN ('S3','S4')));
+create table student (roll_no int primary key, name char(20) not null, sex char(1) CHECK (sex IN ('M','F')), dob date not null check (1999-12-31<dob<getdate()), course varchar(20) 
+CHECK (course IN ('MCA','CSE','ME')), sem varchar(10) CHECK (semk IN ('S3','S4')));
+
+create table marks (Mid int primary key, roll_no int REFERENCES student(roll_no), sub_code char(5) not null, marks int not null check (marks in (between 0 and 100)));
+
+create table student (roll_no int primary key, name char(20) not null, sex char(1) CHECK (sex IN ('M','F')), dob date not null check (dob between 1999-12-31 and getdate()), course varchar(20) CHECK (course IN ('MCA','CSE','ME')), sem varchar(10) CHECK (sem IN ('S3','S4')));
+insert into marks values (1,101,'ASE',48);
+
+create table student (roll_no int primary key, name char(20) not null, sex char(1) CHECK (sex IN ('M','F')), dob date not null, course varchar(20) CHECK (course IN ('MCA','CSE','ME')), sem varchar(10) CHECK (sem IN ('S3','S4')));
+
+create table student (roll_no int primary key, name char(20) not null, sex char(1) CHECK (sex IN ('M','F')), dob date not null check (dob between 1999-12-31 and CURRENT_TIMESTAMP), course varchar(20) CHECK (course IN ('MCA','CSE','ME')), sem varchar(10) CHECK (sem IN ('S3','S4')));
+
+create table student (roll_no int primary key, name char(20) not null, sex char(1) CHECK (sex IN ('M','F')), dob date not null, course varchar(20) CHECK (course IN ('MCA','CSE','ME')), sem varchar(10) CHECK (sem IN ('S3','S4')));
+alter table  student modify dob int check(dob between 1999-12-31 and curdate());
+
+create table student (roll_no int primary key, name char(20) not null, sex char(1) CHECK (sex IN ('M','F')), dob date not null check (dob between 1999-12-31 and curdate()), course varchar(20) CHECK (course IN ('MCA','CSE','ME')), sem varchar(10) CHECK (sem IN ('S3','S4')));
+
+
+select DISTINCT * from student join marks on student.roll_no=marks.roll_no where mark=(select max(marks) from marks); 
+ where marks.marks (select roll_no from marks)
+
+select student.name from student
+inner join marks m using(roll_no)
+inner join (select Mid,max(marks) as maximum from marks m group by Mid)
+highestmark using(subject_id) where highestmark.maximum = m.value order by subject_name,student_name;
+
+
+select branch.branch_name from branch join seats on branch.branch_id=branch.branch_id join college on college.college_id=seats.college_id where college.college_name='AJCE'; 
+
+select DISTINCT college.college_name from branch join seats on branch.branch_id=branch.branch_id join college on college.college_id=seats.college_id where branch.branch='CS'; 
+
+select DISTINCT student.roll_no,student.name,student.sex,student.dob,marks.sub_code,marks.marks from student join marks on student.roll_no=marks.roll_no where marks.marks=(select max(marks) from marks);
+
+
+
