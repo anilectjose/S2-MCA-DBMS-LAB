@@ -1,0 +1,202 @@
+Enter password: ******
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 13
+Server version: 8.0.24 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use anilect;
+Database changed
+mysql> create VIEW view1 as SELECT order_no,order_date from salesorder;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> Desc view1;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| order_no   | varchar(20) | NO   |     | NULL    |       |
+| order_date | date        | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT* from view1;
++----------+------------+
+| order_no | order_date |
++----------+------------+
+| 0        | 2013-06-01 |
+| 01       | 2013-02-01 |
+| 02       | 2013-03-21 |
+| 03       | 2013-03-02 |
+| 04       | 2013-04-02 |
++----------+------------+
+5 rows in set (0.00 sec)
+
+mysql> insert into view1 values ('5','2013-06-01');
+ERROR 3819 (HY000): Check constraint 'salesorder_chk_1' is violated.
+
+mysql> create VIEW view2 as SELECT client_no,cname from clientmaster;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from view2;
++-----------+--------+
+| client_no | cname  |
++-----------+--------+
+|       101 | senchu |
+|       102 | sobin  |
+|       103 | sajan  |
+|       104 | siju   |
+|       105 | george |
+|       106 | achu   |
++-----------+--------+
+6 rows in set (0.00 sec)
+
+mysql> INSERT INTO view2 VALUES(106,'achu');
+ERROR 1062 (23000): Duplicate entry '106' for key 'clientmaster.PRIMARY'
+
+mysql> create view view3 as SELECT * from salesmaster where city='mumbai';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from view3;
++------------+-------+--------+
+| salesmanno | sname | city   |
++------------+-------+--------+
+|          1 | biju  | mumbai |
+|          2 | amith | mumbai |
++------------+-------+--------+
+2 rows in set (0.01 sec)
+
+mysql> create view view4 as SELECT cname,clientmaster.city as ccity,sname,salesmaster.city from salesmaster,clientmaster;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from view4;
++--------+----------+---------+----------+
+| cname  | ccity    | sname   | city     |
++--------+----------+---------+----------+
+| senchu | kannur   | goutham | pala     |
+| senchu | kannur   | anoop   | thrissur |
+| senchu | kannur   | sreelal | kannur   |
+| senchu | kannur   | amith   | mumbai   |
+| senchu | kannur   | biju    | mumbai   |
+| sobin  | kannur   | goutham | pala     |
+| sobin  | kannur   | anoop   | thrissur |
+| sobin  | kannur   | sreelal | kannur   |
+| sobin  | kannur   | amith   | mumbai   |
+| sobin  | kannur   | biju    | mumbai   |
+| sajan  | mumbai   | goutham | pala     |
+| sajan  | mumbai   | anoop   | thrissur |
+| sajan  | mumbai   | sreelal | kannur   |
+| sajan  | mumbai   | amith   | mumbai   |
+| sajan  | mumbai   | biju    | mumbai   |
+| siju   | gujarath | goutham | pala     |
+| siju   | gujarath | anoop   | thrissur |
+| siju   | gujarath | sreelal | kannur   |
+| siju   | gujarath | amith   | mumbai   |
+| siju   | gujarath | biju    | mumbai   |
+| george | kottayam | goutham | pala     |
+| george | kottayam | anoop   | thrissur |
+| george | kottayam | sreelal | kannur   |
+| george | kottayam | amith   | mumbai   |
+| george | kottayam | biju    | mumbai   |
+| achu   | NULL     | goutham | pala     |
+| achu   | NULL     | anoop   | thrissur |
+| achu   | NULL     | sreelal | kannur   |
+| achu   | NULL     | amith   | mumbai   |
+| achu   | NULL     | biju    | mumbai   |
++--------+----------+---------+----------+
+30 rows in set (0.00 sec)
+
+mysql> desc view4;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| cname | varchar(20) | YES  |     | NULL    |       |
+| ccity | varchar(26) | YES  |     | NULL    |       |
+| sname | varchar(20) | YES  |     | NULL    |       |
+| city  | varchar(10) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)
+
+mysql> insert into view4 values('nandu','mumbai','ananthu','mumbai');
+ERROR 1394 (HY000): Can not insert into join view 'anilect.view4' without fields list
+
+mysql> create view view5 as SELECT cname,sname from view4;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from view5;
++--------+---------+
+| cname  | sname   |
++--------+---------+
+| senchu | goutham |
+| senchu | anoop   |
+| senchu | sreelal |
+| senchu | amith   |
+| senchu | biju    |
+| sobin  | goutham |
+| sobin  | anoop   |
+| sobin  | sreelal |
+| sobin  | amith   |
+| sobin  | biju    |
+| sajan  | goutham |
+| sajan  | anoop   |
+| sajan  | sreelal |
+| sajan  | amith   |
+| sajan  | biju    |
+| siju   | goutham |
+| siju   | anoop   |
+| siju   | sreelal |
+| siju   | amith   |
+| siju   | biju    |
+| george | goutham |
+| george | anoop   |
+| george | sreelal |
+| george | amith   |
+| george | biju    |
+| achu   | goutham |
+| achu   | anoop   |
+| achu   | sreelal |
+| achu   | amith   |
+| achu   | biju    |
++--------+---------+
+30 rows in set (0.00 sec)
+
+mysql> desc view5;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| cname | varchar(20) | YES  |     | NULL    |       |
+| sname | varchar(20) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> insert into view5 values('rohan','ronal');
+ERROR 1394 (HY000): Can not insert into join view 'anilect.view5' without fields list
+mysql> drop view view4;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> drop view view5;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> use test;
+Database changed
+
+mysql> create view EMPLOYEES_VU AS SELECT EMPLOYEE_ID,concat(FIRST_NAME ,' ',LAST_NAME)"EMPLOYEE",DEPARTMENT_ID from EMPLOYEES;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> select EMPLOYEE,DEPARTMENT_ID FROM EMPLOYEES_VU;
++-----------------+---------------+
+| EMPLOYEE        | DEPARTMENT_ID |
++-----------------+---------------+
+| Steven King     |            90 |
+| Neena Kochhar   |            90 |
+| Lex De haan     |            90 |
+| Alexander Hunlod|            60 |
+| Bruce Ernst     |            60 |
+| Diana Lorentz   |            60 |
++-----------------+---------------+
+6 rows in set (0.00 sec)

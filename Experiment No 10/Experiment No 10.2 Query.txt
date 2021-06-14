@@ -1,0 +1,56 @@
+/*EXPERIMENT NO.10.2 */
+
+/*1. Create a view view1 from salesorder with (order number,order date) */
+create VIEW view1 as SELECT order_no,order_date from salesorder;
+
+/*2. Describe the view view1*/
+Desc view1;
+
+/*3. Display Values of view1*/
+SELECT* from view1;
+
+/*4. Insert one row of data in view1 and observe the output/error message*/
+insert into view1 values ('5','2013-06-01');
+
+/*5. Create a view view2 from clientmaster (clientno,cname)*/
+create VIEW view2 as SELECT client_no,cname from clientmaster;
+select * from view2;
+
+/*6. Insert one row of data in view2 and observe the output/error message*/
+INSERT INTO view2 VALUES(106,'achu');
+
+/*7. Create a view view3 from salesmaster  with all columns with condition ‘city=mumbai’*/
+create view view3 as SELECT * from salesmaster where city='mumbai';
+select * from view3;
+
+/*8. Create a view view4 from clientmaster and salesmaster with details (cname,city,sname,city)*/
+create view view4 as SELECT cname,clientmaster.city as ccity,sname,salesmaster.city from salesmaster,clientmaster;
+select * from view4;
+
+/*9. Describe view4*/
+desc view4;
+
+/*10. Insert one row of data in view4 and observe the output/error message*/
+insert into view4 values('nandu','mumbai','ananthu','mumbai');
+
+/*11. Create a view view5 from view4(cname,sname)*/
+create view view5 as SELECT cname,sname from view4;
+select * from view5;
+
+/*12. Describe view5 */
+desc view5;
+
+/*13. Insert one row of data in view5 and observe the output/error message*/
+insert into view5 values('rohan','ronal');
+
+/*14. Delete the view4 table */
+drop view view4;
+
+/*15. Delete the view5 table */
+drop view view5;
+
+/*16. */
+create view EMPLOYEES_VU AS SELECT EMPLOYEE_ID,concat(FIRST_NAME ,'',LAST_NAME)"EMPLOYEE",DEPARTMENT_ID from EMPLOYEES;
+select EMPLOYEE,DEPARTMENT_ID FROM EMPLOYEES_VU;
+
+
